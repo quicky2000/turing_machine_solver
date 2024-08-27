@@ -1,6 +1,6 @@
 # Turing machine solver
 
-Continuous integration with [Travis-Ci](https://travis-ci.com/quicky2000/turing_machine_solver) : ![Build Status](https://travis-ci.com/quicky2000/turing_machine_solver.svg?branch=master)
+Continuous integration with [Travis-Ci](https://app.travis-ci.com/github/quicky2000/turing_machine_solver) : ![Build Status](https://app.travis-ci.com/quicky2000/turing_machine_solver.svg?branch=master)
 
 The aim is to compute solution for game Turing Machine
 
@@ -13,5 +13,5 @@ Build
 -----
 
 Build process is the same used in [Travis file](.travis.yml)
-Reference build can be found [here](https://travis-ci.com/quicky2000/turing_machine_solver)
+Reference build can be found [here](https://app.travis-ci.com/github/quicky2000/turing_machine_solver)
 
