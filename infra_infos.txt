@@ -1,0 +1,12 @@
+depend: quicky_exception quicky_utils
+MAIN_CFLAGS:-Wall -pedantic -g -std=c++17 -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -O3 -DNDEBUG
+###########:-Wall -pedantic -g -std=c++17 -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -O0 -g
+CFLAGS:
+LDFLAGS:
+NVCC_CFLAGS:-DENABLE_CUDA_CODE
+NVCC_LDFLAGS:
+NVCC_CC_CFLAGS:
+MAIN_LDFLAGS:
+env_variables:
+enable_cuda:0
+#EOF
