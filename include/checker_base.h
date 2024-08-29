@@ -31,14 +31,17 @@ namespace turing_machine_solver
     {
     public:
         inline
-        checker_base(std::string  p_name
-                    , std::array<checker_func, GRADE> p_funcs);
+        checker_base(unsigned int p_id
+                    ,std::string  p_name
+                    ,std::array<checker_func, GRADE> p_funcs);
 
         [[nodiscard]] inline
         bool
         run(unsigned int p_grade, const candidate & p_candidate) const;
 
     private:
+        unsigned int m_id;
+
         std::string m_name;
 
         std::array<checker_func, GRADE> m_funcs;
@@ -46,10 +49,12 @@ namespace turing_machine_solver
 
     //-------------------------------------------------------------------------
     template <unsigned int GRADE>
-    checker_base<GRADE>::checker_base(std::string  p_name
+    checker_base<GRADE>::checker_base(unsigned int p_id
+                                     ,std::string  p_name
                                      , std::array<checker_func, GRADE> p_funcs
                                      )
-    :m_name{std::move(p_name)}
+    :m_id{p_id}
+    ,m_name{std::move(p_name)}
     ,m_funcs{p_funcs}
     {
     }

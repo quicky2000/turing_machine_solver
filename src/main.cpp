@@ -34,7 +34,7 @@ int main(int argc,char ** argv)
         turing_machine_solver::solver l_solver(nb_verifiers);
         //std::array l_array;
 
-        checker_base<3> l_checker("Le chiffre du carré jaune comparé à  4",
+        checker_base<3> l_checker(4, "Le chiffre du carré jaune comparé à  4",
                                   {checker_func{[](const candidate &p_candidate) -> bool
                                      {return p_candidate.get_yellow_square() < 4;}
                                     ,"jaune < 4"
