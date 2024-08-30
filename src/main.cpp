@@ -17,6 +17,7 @@
 #include "solver.h"
 #include "checker_func.h"
 #include "checker_base.h"
+#include "checker_if.h"
 #include "quicky_exception.h"
 #include <iostream>
 
@@ -49,12 +50,12 @@ int main(int argc,char ** argv)
                                     }
                                    }
                                   );
-
+        checker_if * l_checker_if = &l_checker;
         checker_func l_func{[](const candidate & p_candidate) -> bool {return p_candidate.get_purple_circle() == 3;}, "check"};
         candidate l_candidate{1,2,3};
-        std::cout << l_checker.run(0, l_candidate) << std::endl;
-        std::cout << l_checker.run(1, l_candidate) << std::endl;
-        std::cout << l_checker.run(2, l_candidate) << std::endl;
+        std::cout << l_checker_if->run(0, l_candidate) << std::endl;
+        std::cout << l_checker_if->run(1, l_candidate) << std::endl;
+        std::cout << l_checker_if->run(2, l_candidate) << std::endl;
     }
     catch(quicky_exception::quicky_runtime_exception & e)
     {

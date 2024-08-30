@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(MY_SOURCE_FILES
         include/candidate.h
         include/checker_func.h
+        include/checker_if.h
         include/solver.h
         include/checker_base.h
    )

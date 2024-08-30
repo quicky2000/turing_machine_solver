@@ -18,6 +18,7 @@
 #ifndef TURING_MACHINE_SOLVER_CHECKER_BASE_H
 #define TURING_MACHINE_SOLVER_CHECKER_BASE_H
 
+#include "checker_if.h"
 #include "candidate.h"
 #include "checker_func.h"
 #include <string>
@@ -27,7 +28,7 @@
 namespace turing_machine_solver
 {
     template <unsigned int GRADE>
-    class checker_base
+    class checker_base: public checker_if
     {
     public:
         inline
@@ -37,7 +38,17 @@ namespace turing_machine_solver
 
         [[nodiscard]] inline
         bool
-        run(unsigned int p_grade, const candidate & p_candidate) const;
+        run(unsigned int p_grade, const candidate & p_candidate) const override;
+
+        [[nodiscard]] inline
+        unsigned int
+        get_id() const override;
+
+        [[nodiscard]] inline
+        unsigned int
+        get_grade() const override;
+
+
 
     private:
         unsigned int m_id;
@@ -68,6 +79,22 @@ namespace turing_machine_solver
     {
         assert(p_grade < GRADE);
         return m_funcs[p_grade].run(p_candidate);
+    }
+
+    //-------------------------------------------------------------------------
+    template <unsigned int GRADE>
+    unsigned int
+    checker_base<GRADE>::get_id() const
+    {
+        return m_id;
+    }
+
+    //-------------------------------------------------------------------------
+    template <unsigned int GRADE>
+    unsigned int
+    checker_base<GRADE>::get_grade() const
+    {
+        return GRADE;
     }
 }
 #endif //TURING_MACHINE_SOLVER_CHECKER_BASE_H
