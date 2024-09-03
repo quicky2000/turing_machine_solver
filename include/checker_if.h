@@ -18,6 +18,8 @@
 #ifndef TURING_MACHINE_SOLVER_CHECKER_IF_H
 #define TURING_MACHINE_SOLVER_CHECKER_IF_H
 
+#include <string>
+
 namespace turing_machine_solver
 {
     class candidate;
@@ -34,6 +36,11 @@ namespace turing_machine_solver
         virtual
         unsigned int
         get_grade() const = 0;
+
+        [[nodiscard]]
+        virtual
+        const std::string &
+        get_name() const = 0;
 
         [[nodiscard]]
         virtual

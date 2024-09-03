@@ -48,7 +48,9 @@ namespace turing_machine_solver
         unsigned int
         get_grade() const override;
 
-
+        [[nodiscard]] inline
+        const std::string &
+        get_name() const override;
 
     private:
         unsigned int m_id;
@@ -95,6 +97,14 @@ namespace turing_machine_solver
     checker_base<GRADE>::get_grade() const
     {
         return GRADE;
+    }
+
+    //-------------------------------------------------------------------------
+    template <unsigned int GRADE>
+    const std::string &
+    checker_base<GRADE>::get_name() const
+    {
+        return m_name;
     }
 }
 #endif //TURING_MACHINE_SOLVER_CHECKER_BASE_H
