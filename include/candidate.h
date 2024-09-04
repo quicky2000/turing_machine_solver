@@ -33,6 +33,10 @@ namespace turing_machine_solver
                  ,unsigned int p_purple_circle
                  );
 
+        inline
+        bool
+        operator<(const candidate &) const;
+
         [[nodiscard]]
         unsigned int
         get_blue_triangle() const;
@@ -81,12 +85,20 @@ namespace turing_machine_solver
     }
 
     //-------------------------------------------------------------------------
+    bool
+    candidate::operator<(const candidate & p_candidate) const
+    {
+        return m_content < p_candidate.m_content;
+    }
+
+    //-------------------------------------------------------------------------
     std::ostream & operator<<(std::ostream & p_stream, const candidate & p_candidate)
     {
         p_stream << p_candidate.get_blue_triangle() << " " << p_candidate.get_yellow_square() << " "
         << p_candidate.get_purple_circle() << ")";
         return p_stream;
     }
+
 }
 #endif //TURING_MACHINE_SOLVER_CANDIDATE_H
 // EOF
