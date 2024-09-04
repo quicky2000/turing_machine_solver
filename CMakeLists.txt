@@ -38,6 +38,7 @@ set(MY_INCLUDE_DIRECTORIES
 set(DEPENDANCY_LIST "")
 LIST(APPEND DEPENDANCY_LIST "quicky_exception")
 LIST(APPEND DEPENDANCY_LIST "quicky_utils")
+LIST(APPEND DEPENDANCY_LIST "combinatorics")
 
 #------------------------------
 #- Generic part

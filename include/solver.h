@@ -19,10 +19,12 @@
 #define TURING_MACHINE_SOLVER_SOLVER_H
 
 #include "checker_base.h"
+#include "enumerator.h"
 #include "quicky_exception.h"
 #include <map>
 #include <memory>
 #include <iostream>
+#include <set>
 
 namespace turing_machine_solver
 {
@@ -50,6 +52,8 @@ namespace turing_machine_solver
 
         std::vector<std::shared_ptr<checker_if>> m_checkers;
 
+        std::set<candidate> m_candidates;
+
         inline static std::map<unsigned int, std::shared_ptr<checker_if>> m_all_checkers;
     };
 
@@ -71,6 +75,14 @@ namespace turing_machine_solver
             std::cin >> l_id;
             m_checkers.emplace_back(get_checker(l_id));
         } while (m_checkers.size() < p_nb_checkers);
+
+        std::vector<combinatorics::symbol> l_symbols{{1,5}, {2, 5}, {3, 5}, {4, 5}, {5, 5}};
+        combinatorics::enumerator l_enumerator{l_symbols, 3};
+        while(l_enumerator.generate())
+        {
+            l_enumerator.display_word();
+            m_candidates.insert({l_enumerator.get_word_item(0), l_enumerator.get_word_item(1), l_enumerator.get_word_item(2)});
+        }
     }
 
     //-------------------------------------------------------------------------

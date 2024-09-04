@@ -39,6 +39,7 @@ before_install:
   - git clone https://github.com/quicky2000/quicky_tools.git
   - git clone https://github.com/quicky2000/quicky_exception.git
   - git clone https://github.com/quicky2000/quicky_utils.git
+  - git clone https://github.com/quicky2000/combinatorics.git
   - cd $MY_LOCATION/repositories
   - cd quicky_tools/setup
   - . setup.sh
