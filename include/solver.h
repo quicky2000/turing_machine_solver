@@ -40,6 +40,14 @@ namespace turing_machine_solver
 
     private:
 
+        /**
+         * Compute all checker combinations depending on their respective grade
+         * @param p_max_grade
+         */
+        inline
+        void
+        compute_potential_checkers(unsigned int p_max_grade);
+
         inline static
         void
         register_all_checkers();
@@ -54,6 +62,8 @@ namespace turing_machine_solver
 
         std::set<candidate> m_candidates;
 
+        std::set<std::string> m_potential_checkers;
+
         inline static std::map<unsigned int, std::shared_ptr<checker_if>> m_all_checkers;
     };
 
@@ -65,6 +75,8 @@ namespace turing_machine_solver
         {
             register_all_checkers();
         }
+
+        unsigned int l_max_grade = 0;
         do
         {
             for(auto l_iter: m_all_checkers)
@@ -74,6 +86,10 @@ namespace turing_machine_solver
             unsigned int l_id;
             std::cin >> l_id;
             m_checkers.emplace_back(get_checker(l_id));
+            if(l_max_grade < m_checkers.back()->get_grade())
+            {
+                l_max_grade = m_checkers.back()->get_grade();
+            }
         } while (m_checkers.size() < p_nb_checkers);
 
         std::vector<combinatorics::symbol> l_symbols{{1,5}, {2, 5}, {3, 5}, {4, 5}, {5, 5}};
@@ -83,6 +99,44 @@ namespace turing_machine_solver
             l_enumerator.display_word();
             m_candidates.insert({l_enumerator.get_word_item(0), l_enumerator.get_word_item(1), l_enumerator.get_word_item(2)});
         }
+
+        compute_potential_checkers(l_max_grade);
+    }
+
+    //-------------------------------------------------------------------------
+    void
+    solver::compute_potential_checkers(unsigned int p_max_grade)
+    {
+        std::vector<combinatorics::symbol> l_symbols;
+        for(unsigned int l_grade = 0; l_grade < p_max_grade; ++l_grade)
+        {
+            l_symbols.emplace_back(l_grade + 1, p_max_grade);
+        }
+        combinatorics::enumerator l_enumerator{l_symbols, static_cast<unsigned int>(m_checkers.size())};
+        while(l_enumerator.generate())
+        {
+            bool l_ok = true;
+            std::string l_str;
+            for(unsigned int l_index = 0; l_index < m_checkers.size(); ++l_index)
+            {
+                unsigned int l_func_index = l_enumerator.get_word_item(l_index) - 1;
+                if(l_func_index < m_checkers[l_index]->get_grade())
+                {
+                    l_str += '0' + l_func_index;
+                }
+                else
+                {
+                    l_ok = false;
+                    break;
+                }
+            }
+            if(l_ok)
+            {
+                std::cout << "Potential checker combination: " << l_str << std::endl;
+                m_potential_checkers.insert(l_str);
+            }
+        }
+        std::cout << m_potential_checkers.size() << " checker combinations possible" << std::endl;
     }
 
     //-------------------------------------------------------------------------
