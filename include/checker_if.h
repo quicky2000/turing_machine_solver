@@ -46,6 +46,17 @@ namespace turing_machine_solver
         virtual
         bool
         run(unsigned int p_grade, const candidate & p_candidate) const = 0;
+
+        /**
+         * Indicate which checker condition is satisfied by candidate
+         * @param p_candidate candidate to check
+         * @return index of condition which return true
+         */
+        [[nodiscard]]
+        virtual
+        unsigned int
+        get_correct_condition(const candidate & p_candidate) const = 0;
+
     private:
     };
 }

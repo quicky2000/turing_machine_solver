@@ -21,6 +21,7 @@
 #include "checker_if.h"
 #include "candidate.h"
 #include "checker_func.h"
+#include "quicky_exception.h"
 #include <string>
 #include <utility>
 #include <cassert>
@@ -52,6 +53,15 @@ namespace turing_machine_solver
         const std::string &
         get_name() const override;
 
+        /**
+         * Indicate which checker condition is satisfied by candidate
+         * @param p_candidate candidate to check
+         * @return index of condition which return true
+         */
+        [[nodiscard]] inline
+        unsigned int
+        get_correct_condition(const candidate & p_candidate) const override;
+
     private:
         unsigned int m_id;
 
@@ -81,6 +91,22 @@ namespace turing_machine_solver
     {
         assert(p_grade < GRADE);
         return m_funcs[p_grade].run(p_candidate);
+    }
+
+    //-------------------------------------------------------------------------
+    template <unsigned int GRADE>
+    unsigned int
+    checker_base<GRADE>::get_correct_condition(const candidate & p_candidate) const
+    {
+        for(unsigned int l_index = 0; l_index < GRADE; ++l_index)
+        {
+            if(run(l_index, p_candidate))
+            {
+                return l_index;
+            }
+        }
+        throw quicky_exception::quicky_runtime_exception("No checker func matching"
+                                                        , __LINE__, __FILE__);
     }
 
     //-------------------------------------------------------------------------
