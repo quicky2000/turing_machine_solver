@@ -94,7 +94,7 @@ namespace turing_machine_solver
     //-------------------------------------------------------------------------
     std::ostream & operator<<(std::ostream & p_stream, const candidate & p_candidate)
     {
-        p_stream << p_candidate.get_blue_triangle() << " " << p_candidate.get_yellow_square() << " "
+        p_stream << "(" << p_candidate.get_blue_triangle() << " " << p_candidate.get_yellow_square() << " "
         << p_candidate.get_purple_circle() << ")";
         return p_stream;
     }
