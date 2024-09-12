@@ -59,7 +59,7 @@ namespace turing_machine_solver
          * @return index of condition which return true
          */
         [[nodiscard]] inline
-        unsigned int
+        std::optional<unsigned int>
         get_correct_condition(const candidate & p_candidate) const override;
 
     private:
@@ -95,7 +95,7 @@ namespace turing_machine_solver
 
     //-------------------------------------------------------------------------
     template <unsigned int GRADE>
-    unsigned int
+    std::optional<unsigned int>
     checker_base<GRADE>::get_correct_condition(const candidate & p_candidate) const
     {
         for(unsigned int l_index = 0; l_index < GRADE; ++l_index)
@@ -105,8 +105,7 @@ namespace turing_machine_solver
                 return l_index;
             }
         }
-        throw quicky_exception::quicky_runtime_exception("No checker func matching"
-                                                        , __LINE__, __FILE__);
+        return {};
     }
 
     //-------------------------------------------------------------------------
