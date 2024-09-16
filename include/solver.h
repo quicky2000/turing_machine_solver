@@ -40,6 +40,10 @@ namespace turing_machine_solver
 
     private:
 
+        [[nodiscard]] inline
+        std::string
+        get_correct_conditions(const candidate & p_candidate);
+
         /**
          * Compute all checker combinations depending on their respective grade
          * @param p_max_grade
@@ -98,6 +102,19 @@ namespace turing_machine_solver
         }
 
         compute_potential_checkers(l_max_grade);
+    }
+
+    //-------------------------------------------------------------------------
+    std::string
+    solver::get_correct_conditions(const candidate & p_candidate)
+    {
+        std::string l_result;
+        for(const auto & l_iter:m_checkers)
+        {
+            auto l_single_result{l_iter->get_correct_condition(p_candidate)};
+            l_result += l_single_result ? static_cast<char>(static_cast<unsigned int>('0') + *l_single_result) : '-';
+        }
+        return l_result;
     }
 
     //-------------------------------------------------------------------------
