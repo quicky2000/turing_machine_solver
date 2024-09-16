@@ -76,7 +76,7 @@ namespace turing_machine_solver
         unsigned int l_max_grade = 0;
         do
         {
-            for(auto l_iter: m_all_checkers)
+            for(const auto & l_iter: m_all_checkers)
             {
                 std::cout << l_iter.first << " " << l_iter.second->get_name() << std::endl;
             }
@@ -119,7 +119,7 @@ namespace turing_machine_solver
                 unsigned int l_func_index = l_enumerator.get_word_item(l_index) - 1;
                 if(l_func_index < m_checkers[l_index]->get_grade())
                 {
-                    l_str += '0' + l_func_index;
+                    l_str += static_cast<char>('0' + l_func_index);
                 }
                 else
                 {
