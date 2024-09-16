@@ -102,6 +102,23 @@ namespace turing_machine_solver
         }
 
         compute_potential_checkers(l_max_grade);
+
+        // Test every candidate with all checkers to restrain candidates
+        std::cout << "Candidates matching with checkers:" << std::endl;
+        std::vector<candidate> l_bad_candidates;
+        for(const auto & l_iter: m_candidates)
+        {
+            std::string l_result = get_correct_conditions(l_iter);
+            if(l_result.find('-') == std::string::npos)
+            {
+                std::cout << l_iter << std::endl;
+            }
+            else
+            {
+                l_bad_candidates.emplace_back(l_iter);
+            }
+        }
+        std::cout << l_bad_candidates.size() << " not compliant with potential checkers" << std::endl;
     }
 
     //-------------------------------------------------------------------------
