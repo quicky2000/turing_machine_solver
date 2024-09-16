@@ -15,9 +15,6 @@
       along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 #include "solver.h"
-#include "checker_func.h"
-#include "checker_base.h"
-#include "checker_if.h"
 #include "quicky_exception.h"
 #include <iostream>
 
@@ -33,29 +30,6 @@ int main(int argc,char ** argv)
         std::cin >> nb_verifiers;
         std::cout << "You define " << nb_verifiers << " verifiers" << std::endl;
         turing_machine_solver::solver l_solver(nb_verifiers);
-        //std::array l_array;
-
-        checker_base<3> l_checker(4, "Le chiffre du carré jaune comparé à  4",
-                                  {checker_func{[](const candidate &p_candidate) -> bool
-                                     {return p_candidate.get_yellow_square() < 4;}
-                                    ,"jaune < 4"
-                                    },
-                                    {[](const candidate &p_candidate) -> bool
-                                     {return p_candidate.get_yellow_square() == 4;}
-                                    , "jaune == 4"
-                                    },
-                                    {[](const candidate &p_candidate) -> bool
-                                     {return p_candidate.get_yellow_square() > 4;}
-                                    , "jaune > à 4"
-                                    }
-                                   }
-                                  );
-        checker_if * l_checker_if = &l_checker;
-        checker_func l_func{[](const candidate & p_candidate) -> bool {return p_candidate.get_purple_circle() == 3;}, "check"};
-        candidate l_candidate{1,2,3};
-        std::cout << l_checker_if->run(0, l_candidate) << std::endl;
-        std::cout << l_checker_if->run(1, l_candidate) << std::endl;
-        std::cout << l_checker_if->run(2, l_candidate) << std::endl;
     }
     catch(quicky_exception::quicky_runtime_exception & e)
     {
