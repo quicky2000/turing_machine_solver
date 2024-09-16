@@ -56,8 +56,6 @@ namespace turing_machine_solver
         void
         register_checker(const std::shared_ptr<checker_if> & p_checker);
 
-        unsigned int m_nb_checkers;
-
         std::vector<std::shared_ptr<checker_if>> m_checkers;
 
         std::set<candidate> m_candidates;
@@ -69,7 +67,6 @@ namespace turing_machine_solver
 
     //-------------------------------------------------------------------------
     solver::solver(unsigned int p_nb_checkers)
-    :m_nb_checkers{p_nb_checkers}
     {
         if(m_all_checkers.empty())
         {
