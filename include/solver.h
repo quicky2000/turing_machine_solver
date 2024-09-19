@@ -60,11 +60,31 @@ namespace turing_machine_solver
         void
         register_checker(const std::shared_ptr<checker_if> & p_checker);
 
+        /**
+         * Record relation between candidate and checker
+         * @param p_candidate
+         * @param p_checkers
+         * @param p_bad_checkers list of eliminated checkers
+         * @param p_candidate_with_bad_checkers list of candidates related to
+         * eliminated checkers
+         */
+        inline
+        void
+        relate_candidate_checker(const candidate & p_candidate
+                                ,const std::string & p_checkers
+                                ,std::set<std::string> & p_bad_checkers
+                                ,std::set<candidate> & p_candidate_with_bad_checkers
+                                );
+
         std::vector<std::shared_ptr<checker_if>> m_checkers;
 
         std::set<candidate> m_candidates;
 
         std::set<std::string> m_potential_checkers;
+
+        std::map<candidate, std::string> m_candidate_to_checkers;
+
+        std::map<std::string, candidate> m_checkers_to_candidate;
 
         inline static std::map<unsigned int, std::shared_ptr<checker_if>> m_all_checkers;
     };
@@ -106,19 +126,39 @@ namespace turing_machine_solver
         // Test every candidate with all checkers to restrain candidates
         std::cout << "Candidates matching with checkers:" << std::endl;
         std::vector<candidate> l_bad_candidates;
+        std::set<std::string> l_bad_checkers;
+        std::set<candidate> l_candidate_with_bad_checkers;
         for(const auto & l_iter: m_candidates)
         {
             std::string l_result = get_correct_conditions(l_iter);
             if(l_result.find('-') == std::string::npos)
             {
-                std::cout << l_iter << std::endl;
+                std::cout << l_iter << "->" << l_result << std::endl;
+                relate_candidate_checker(l_iter, l_result, l_bad_checkers, l_candidate_with_bad_checkers);
             }
             else
             {
                 l_bad_candidates.emplace_back(l_iter);
             }
         }
-        std::cout << l_bad_candidates.size() << " not compliant with potential checkers" << std::endl;
+        std::cout << l_bad_candidates.size() << " candidates not compliant with potential checkers" << std::endl;
+        std::cout << l_bad_checkers.size() << " checkers associated with several candidates" << std::endl;
+        std::cout << l_candidate_with_bad_checkers.size() << " candidates associated with bad checkers" << std::endl;
+
+        // Remove candidates that have been associated with bad checkers
+        // This is done after because removing them on the fly would not allow
+        // if several potential checkers match 1 candidate
+        for(const auto & l_iter:l_candidate_with_bad_checkers)
+        {
+            m_candidate_to_checkers.erase(l_iter);
+        }
+
+        std::cout << m_candidate_to_checkers.size() << " candidates remaining" << std::endl;
+        std::cout << m_checkers_to_candidate.size() << " checkers combinations remaining" << std::endl;
+        for(const auto & l_iter: m_candidate_to_checkers)
+        {
+            std::cout << l_iter.first << " -> " << l_iter.second << std::endl;
+        }
     }
 
     //-------------------------------------------------------------------------
@@ -349,6 +389,32 @@ namespace turing_machine_solver
     {
         assert(!m_all_checkers.contains(p_checker->get_id()));
         m_all_checkers.insert(make_pair(p_checker->get_id(), p_checker));
+    }
+
+    //-------------------------------------------------------------------------
+    void
+    solver::relate_candidate_checker(const candidate & p_candidate
+                                    ,const std::string & p_checkers
+                                    ,std::set<std::string> & p_bad_checkers
+                                    ,std::set<candidate> & p_candidate_with_bad_checkers
+                                    )
+    {
+        assert(!m_candidate_to_checkers.contains(p_candidate));
+        auto l_iter = m_checkers_to_candidate.find(p_checkers);
+        if(m_checkers_to_candidate.end() == l_iter)
+        {
+            if(!p_bad_checkers.contains(p_checkers))
+            {
+                m_candidate_to_checkers.insert(make_pair(p_candidate, p_checkers));
+                m_checkers_to_candidate.insert(make_pair(p_checkers, p_candidate));
+            }
+        }
+        else
+        {
+            p_candidate_with_bad_checkers.insert(l_iter->second);
+            m_checkers_to_candidate.erase(l_iter);
+            p_bad_checkers.insert(p_checkers);
+        }
     }
 
 
