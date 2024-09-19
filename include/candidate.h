@@ -18,6 +18,7 @@
 #ifndef TURING_MACHINE_SOLVER_CANDIDATE_H
 #define TURING_MACHINE_SOLVER_CANDIDATE_H
 
+#include "quicky_exception.h"
 #include <tuple>
 #include <ostream>
 
@@ -27,6 +28,10 @@ namespace turing_machine_solver
     {
         friend std::ostream & operator<<(std::ostream &, const candidate & );
     public:
+
+        explicit inline
+        candidate(unsigned int p_num);
+
         inline
         candidate(unsigned int p_blue_triangle
                  ,unsigned int p_yellow_square
@@ -49,6 +54,10 @@ namespace turing_machine_solver
         unsigned int
         get_purple_circle() const;
 
+        inline static
+        void
+        check_number(unsigned int p_value, const std::string & p_name);
+
     private:
         std::tuple<unsigned int, unsigned int, unsigned int> m_content;
     };
@@ -60,7 +69,32 @@ namespace turing_machine_solver
                         )
     :m_content(p_blue_triangle, p_yellow_square, p_purple_circle)
     {
+        check_number(p_blue_triangle, "Blue triangle");
+        check_number(p_yellow_square, "Yellow square");
+        check_number(p_purple_circle, "Purple circle");
+    }
 
+    //-------------------------------------------------------------------------
+    candidate::candidate(unsigned int p_num)
+    :candidate(p_num / 100
+              ,(p_num - (100 * (p_num / 100))) / 10
+              , p_num - 10 * ( p_num / 10)
+              )
+    {
+
+    }
+
+    //-------------------------------------------------------------------------
+    void
+    candidate::check_number(unsigned int p_value, const std::string & p_name)
+    {
+        if(p_value < 1 || p_value > 5)
+        {
+            throw quicky_exception::quicky_logic_exception(p_name + " should be in [1-5] : " + std::to_string(p_value)
+                                                          , __LINE__
+                                                          , __FILE__
+                                                          );
+        }
     }
 
     //-------------------------------------------------------------------------
