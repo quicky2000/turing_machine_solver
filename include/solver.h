@@ -471,6 +471,42 @@ namespace turing_machine_solver
                          }
                         );
         register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<4>
+                          (10
+                          ,"Le nombre de chiffre 4 dans le code"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return 0 == (p_candidate.get_yellow_square() == 4)
+					            + (p_candidate.get_purple_circle() == 4)
+						    + (p_candidate.get_blue_triangle() == 4);
+					 }
+                                        ,"pas de 4"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return 1 == (p_candidate.get_yellow_square() == 4)
+                                        + (p_candidate.get_purple_circle() == 4)
+                                        + (p_candidate.get_blue_triangle() == 4);
+                             }
+                            ,"un 4"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return 2 == (p_candidate.get_yellow_square() == 4)
+                                        + (p_candidate.get_purple_circle() == 4)
+                                        + (p_candidate.get_blue_triangle() == 4);
+                             }
+                             , "deux 4"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return 3 == (p_candidate.get_yellow_square() == 4)
+                                        + (p_candidate.get_purple_circle() == 4)
+                                        + (p_candidate.get_blue_triangle() == 4);
+                             }
+                            ,"trois 4"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
                          {new checker_base<3>
                           (11
                           ,"Le chiffre du triangle bleu comparé au carre jaune"
@@ -631,6 +667,80 @@ namespace turing_machine_solver
                                         + (p_candidate.get_blue_triangle() % 2);
                              }
                             ,"trois chiffres pair"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<2>
+                          (18
+                          ,"La somme de tous les chiffres est paire ou impaire"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return !((p_candidate.get_yellow_square()
+					          + p_candidate.get_purple_circle()
+						  + p_candidate.get_blue_triangle()
+                                                   ) % 2
+                                                  );
+					 }
+                                        ,"La somme des chiffres est paire"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return ((p_candidate.get_yellow_square()
+                                     + p_candidate.get_purple_circle()
+                                     + p_candidate.get_blue_triangle()
+				      ) % 2
+				     );
+                             }
+                            ,"La somme des chiffres est impaire"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<3>
+                          (19
+                          ,"La somme du triangle bleu et du carre jaune comparee a 6"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return (p_candidate.get_blue_triangle() + p_candidate.get_yellow_square()) < 6;}
+                                        ,"bleu + jaune < 6"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return (p_candidate.get_blue_triangle() + p_candidate.get_yellow_square()) == 6;}
+                            ,"bleu + jaune = 6"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return (p_candidate.get_blue_triangle() + p_candidate.get_yellow_square()) > 6;}
+                             , "bleu + jaune > 6"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<3>
+                          (20
+                          ,"Un chiffre se repete dans le code"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return (p_candidate.get_blue_triangle() == p_candidate.get_yellow_square() && p_candidate.get_blue_triangle() == p_candidate.get_purple_circle());}
+                                        ,"un chiffre triple"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return 2 == ((p_candidate.get_blue_triangle() == p_candidate.get_yellow_square()) +
+					   (p_candidate.get_blue_triangle() == p_candidate.get_purple_circle()) +
+			                   (p_candidate.get_yellow_square() == p_candidate.get_purple_circle())
+                                          );
+			     }
+                            ,"un chiffre double"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return (p_candidate.get_blue_triangle() != p_candidate.get_yellow_square() &&
+                                      p_candidate.get_blue_triangle() != p_candidate.get_purple_circle() &&
+				      p_candidate.get_yellow_square() != p_candidate.get_purple_circle()
+                                     );
+                             }
+                             , "pas de repetition"
                             }
                            }
                           )
