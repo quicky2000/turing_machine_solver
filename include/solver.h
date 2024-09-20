@@ -352,6 +352,38 @@ namespace turing_machine_solver
                         );
         register_checker(std::shared_ptr<checker_if>
                          {new checker_base<2>
+                          (5
+                          ,"Triangle bleu est pair ou impair"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return !(p_candidate.get_blue_triangle() % 2);}
+                                        ,"Bleu est pair"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return (p_candidate.get_blue_triangle() % 2);}
+                            ,"Jaune est impair"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<2>
+                          (6
+                          ,"Carre jaune est pair ou impair"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return !(p_candidate.get_yellow_square() % 2);}
+                                        ,"Jaune est pair"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return (p_candidate.get_yellow_square() % 2);}
+                            ,"Jaune est impair"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<2>
                           (7
                           ,"cercle violet pair ou impair"
                           ,{checker_func{[](const candidate &p_candidate) -> bool
@@ -361,6 +393,42 @@ namespace turing_machine_solver
                            ,{[](const candidate &p_candidate) -> bool
                              {return (p_candidate.get_purple_circle() % 2);}
                             ,"violet est impair"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<4>
+                          (8
+                          ,"Le nombre de chiffre 1 dans le code"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return 0 == (p_candidate.get_yellow_square() == 1)
+					            + (p_candidate.get_purple_circle() == 1)
+						    + (p_candidate.get_blue_triangle() == 1);
+					 }
+                                        ,"pas de 1"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return 1 == (p_candidate.get_yellow_square() == 1)
+                                        + (p_candidate.get_purple_circle() == 1)
+                                        + (p_candidate.get_blue_triangle() == 1);
+                             }
+                            ,"un 1"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return 2 == (p_candidate.get_yellow_square() == 1)
+                                        + (p_candidate.get_purple_circle() == 1)
+                                        + (p_candidate.get_blue_triangle() == 1);
+                             }
+                             , "deux 1"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return 3 == (p_candidate.get_yellow_square() == 1)
+                                        + (p_candidate.get_purple_circle() == 1)
+                                        + (p_candidate.get_blue_triangle() == 1);
+                             }
+                            ,"trois 1"
                             }
                            }
                           )
@@ -404,6 +472,46 @@ namespace turing_machine_solver
                         );
         register_checker(std::shared_ptr<checker_if>
                          {new checker_base<3>
+                          (11
+                          ,"Le chiffre du triangle bleu comparé au carre jaune"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return p_candidate.get_blue_triangle() < p_candidate.get_yellow_square();}
+                                        ,"bleu < jaune"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_blue_triangle() == p_candidate.get_yellow_square();}
+                            ,"bleu == jaune"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_blue_triangle() > p_candidate.get_yellow_square();}
+                             , "bleu > à jaune"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<3>
+                          (12
+                          ,"Le chiffre du triangle bleu comparé au cercle violet"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return p_candidate.get_blue_triangle() < p_candidate.get_purple_circle();}
+                                        ,"bleu < violet"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_blue_triangle() == p_candidate.get_purple_circle();}
+                            ,"bleu == violet"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_blue_triangle() > p_candidate.get_purple_circle();}
+                             , "bleu > à violet"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<3>
                           (13
                           ,"Le chiffre du carré jaune comparé au cercle violet"
                           ,{checker_func{[](const candidate &p_candidate) -> bool
@@ -437,9 +545,92 @@ namespace turing_machine_solver
                             ,"jaune < (bleu && violeti)"
                             }
                            ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_purple_circle() < p_candidate.get_yellow_square()
+                                  && p_candidate.get_purple_circle() < p_candidate.get_blue_triangle();}
+                             , "violet < (jaune && bleu)"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<3>
+                          (15
+                          ,"Quelle couleur a le chiffre plus grand que les autres"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return p_candidate.get_blue_triangle() > p_candidate.get_yellow_square()
+					     &&  p_candidate.get_blue_triangle() > p_candidate.get_purple_circle();}
+                                        ,"bleu > (jaune && violet)"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_yellow_square() > p_candidate.get_purple_circle()
+			          && p_candidate.get_yellow_square() > p_candidate.get_blue_triangle();}
+                            ,"jaune > (bleu && violeti)"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
                              {return p_candidate.get_purple_circle() > p_candidate.get_yellow_square()
                                   && p_candidate.get_purple_circle() > p_candidate.get_blue_triangle();}
-                             , "violet < (jaune && bleu)"
+                             , "violet > (jaune && bleu)"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<2>
+                          (16
+                          ,"Le nombre de chiffres pairs compare au nombre de chiffres impairs"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {unsigned int l_nb_impair = (p_candidate.get_purple_circle() % 2) +
+					                             (p_candidate.get_yellow_square() % 2) +
+								     (p_candidate.get_blue_triangle() % 2);
+                                          return 3 - l_nb_impair > l_nb_impair;
+					 }
+                                        ,"Pair > Impair"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {unsigned int l_nb_impair = (p_candidate.get_purple_circle() % 2) +
+			                                 (p_candidate.get_yellow_square() % 2) +
+			                                 (p_candidate.get_blue_triangle() % 2);
+                              return 3 - l_nb_impair < l_nb_impair;
+			     }
+                            ,"Pair < impair"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<4>
+                          (17
+                          ,"Le nombre de chiffre pair dans le code"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return 3 == (p_candidate.get_yellow_square() % 2)
+					            + (p_candidate.get_purple_circle() % 2)
+						    + (p_candidate.get_blue_triangle() % 2);
+					 }
+                                        ,"aucun chiffre pair"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return 2 == (p_candidate.get_yellow_square() % 2)
+                                        + (p_candidate.get_purple_circle() % 2)
+                                        + (p_candidate.get_blue_triangle() % 2);
+                             }
+                            ,"un chiffres pair"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return 1 == (p_candidate.get_yellow_square() % 2)
+                                        + (p_candidate.get_purple_circle() % 2)
+                                        + (p_candidate.get_blue_triangle() % 2);
+                             }
+                             ,"deux chiffre pair"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return 0 == (p_candidate.get_yellow_square() % 2)
+                                        + (p_candidate.get_purple_circle() % 2)
+                                        + (p_candidate.get_blue_triangle() % 2);
+                             }
+                            ,"trois chiffres pair"
                             }
                            }
                           )
