@@ -30,6 +30,23 @@ int main(int argc,char ** argv)
         std::cin >> nb_verifiers;
         std::cout << "You define " << nb_verifiers << " verifiers" << std::endl;
         turing_machine_solver::solver l_solver(nb_verifiers);
+
+        do
+        {
+            unsigned int l_candidate_num;
+            std::cout << "Propose a candidate ?" << std::endl;
+            std::cin >> l_candidate_num;
+            candidate l_candidate{l_candidate_num};
+            std::cout << "Checker index ?" << std::endl;
+            unsigned int l_checker_index;
+            std::cin >> l_checker_index;
+            std::cout << "Checker result ?" << std::endl;
+            bool l_result;
+            std::cin >> l_result;
+            std::cout << "You entered result " << l_result << std::endl;
+            l_solver.analyze_result(l_candidate, l_checker_index, l_result);
+
+        } while(l_solver.get_remaining_candidates() > 1);
     }
     catch(quicky_exception::quicky_runtime_exception & e)
     {

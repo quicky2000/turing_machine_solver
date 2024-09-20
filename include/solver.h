@@ -38,7 +38,23 @@ namespace turing_machine_solver
         std::shared_ptr<checker_if>
         get_checker(unsigned int p_id);
 
+
+        [[nodiscard]] inline
+        unsigned int
+        get_remaining_candidates() const;
+
+        inline
+        void
+        analyze_result(const candidate & p_candidate
+                      ,unsigned int p_checker_index
+                      ,bool l_result
+                      );
+
     private:
+
+        inline
+        void
+        display_remaining();
 
         [[nodiscard]] inline
         std::string
@@ -153,12 +169,61 @@ namespace turing_machine_solver
             m_candidate_to_checkers.erase(l_iter);
         }
 
+        display_remaining();
+    }
+
+    //-------------------------------------------------------------------------
+    void
+    solver::display_remaining()
+    {
         std::cout << m_candidate_to_checkers.size() << " candidates remaining" << std::endl;
         std::cout << m_checkers_to_candidate.size() << " checkers combinations remaining" << std::endl;
         for(const auto & l_iter: m_candidate_to_checkers)
         {
             std::cout << l_iter.first << " -> " << l_iter.second << std::endl;
         }
+    }
+
+    //-------------------------------------------------------------------------
+    void
+    solver::analyze_result(const candidate & p_candidate
+                          ,unsigned int p_checker_index
+                          ,bool l_result
+                          )
+    {
+        if(p_checker_index > m_checkers.size())
+        {
+            throw quicky_exception::quicky_logic_exception("Bad checker value " + std::to_string(p_checker_index) + ", should be in range [0," + std::to_string(m_checkers.size() - 1)
+                                                          , __LINE__
+                                                          , __FILE__
+                                                          );
+        }
+        auto l_iter = m_candidate_to_checkers.find(p_candidate);
+        if(l_iter == m_candidate_to_checkers.end())
+        {
+            throw quicky_exception::quicky_logic_exception("Bad candidate", __LINE__, __FILE__);
+        }
+        assert(l_iter->second.size() > p_checker_index);
+        unsigned char l_checker_state = l_iter->second[p_checker_index];
+        std::vector<std::string> l_bad_checkers;
+        std::vector<candidate> l_bad_candidates;
+        for(const auto & l_iter_candidate: m_candidate_to_checkers)
+        {
+            if((l_iter_candidate.second[p_checker_index] == l_checker_state) ^ l_result)
+            {
+                l_bad_checkers.emplace_back(l_iter_candidate.second);
+                l_bad_candidates.emplace_back(l_iter_candidate.first);
+            }
+        }
+        for(const auto & l_iter_candidate: l_bad_candidates)
+        {
+            m_candidate_to_checkers.erase(l_iter_candidate);
+        }
+        for(const auto & l_iter_checker: l_bad_checkers)
+        {
+            m_checkers_to_candidate.erase(l_iter_checker);
+        }
+        display_remaining();
     }
 
     //-------------------------------------------------------------------------
@@ -416,6 +481,14 @@ namespace turing_machine_solver
             p_bad_checkers.insert(p_checkers);
         }
     }
+
+    //-------------------------------------------------------------------------
+    unsigned int
+    solver::get_remaining_candidates() const
+    {
+        return m_candidate_to_checkers.size();
+    }
+
 
 
 }
