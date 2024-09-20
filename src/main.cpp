@@ -42,6 +42,7 @@ int main(int argc,char ** argv)
             unsigned int l_remaining_check = 3;
             do
             {
+                std::cout << "Current candidate " << l_candidate << " -> " << l_checker << std::endl;
                 std::cout << "Checker index ? ( -1 to propose a new candidate)" << std::endl;
                 std::cin >> l_checker_index;
                 if(l_checker_index != -1)
