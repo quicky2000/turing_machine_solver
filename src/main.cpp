@@ -25,11 +25,11 @@ int main(int argc,char ** argv)
 {
     try
     {
-        std::cout << "How many verifiers ?" << std::endl;
-        int nb_verifiers;
-        std::cin >> nb_verifiers;
-        std::cout << "You define " << nb_verifiers << " verifiers" << std::endl;
-        turing_machine_solver::solver l_solver(nb_verifiers);
+        std::cout << "How many checkers ?" << std::endl;
+        int nb_checkers;
+        std::cin >> nb_checkers;
+        std::cout << "You define " << nb_checkers << " checkers" << std::endl;
+        turing_machine_solver::solver l_solver(nb_checkers);
 
         do
         {
