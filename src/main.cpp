@@ -37,14 +37,23 @@ int main(int argc,char ** argv)
             std::cout << "Propose a candidate ?" << std::endl;
             std::cin >> l_candidate_num;
             candidate l_candidate{l_candidate_num};
-            std::cout << "Checker index ?" << std::endl;
-            unsigned int l_checker_index;
-            std::cin >> l_checker_index;
-            std::cout << "Checker result ?" << std::endl;
-            bool l_result;
-            std::cin >> l_result;
-            std::cout << "You entered result " << l_result << std::endl;
-            l_solver.analyze_result(l_candidate, l_checker_index, l_result);
+            std::string l_checker = l_solver.get_related_checker(l_candidate);
+            int l_checker_index;
+            unsigned int l_remaining_check = 3;
+            do
+            {
+                std::cout << "Checker index ? ( -1 to propose a new candidate)" << std::endl;
+                std::cin >> l_checker_index;
+                if(l_checker_index != -1)
+                {
+                    std::cout << "Checker result ?" << std::endl;
+                    bool l_result;
+                    std::cin >> l_result;
+                    std::cout << "You entered result " << l_result << std::endl;
+                    --l_remaining_check;
+                    l_solver.analyze_result(l_checker, static_cast<unsigned int>(l_checker_index), l_result);
+                }
+            } while(l_remaining_check && l_checker_index != -1 && l_solver.get_remaining_candidates() > 1);
 
         } while(l_solver.get_remaining_candidates() > 1);
     }

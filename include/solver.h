@@ -45,10 +45,14 @@ namespace turing_machine_solver
 
         inline
         void
-        analyze_result(const candidate & p_candidate
+        analyze_result(const std::string & p_checker
                       ,unsigned int p_checker_index
                       ,bool l_result
                       );
+
+        [[nodiscard]] inline
+        std::string
+        get_related_checker(const candidate & p_candidate) const;
 
     private:
 
@@ -185,8 +189,20 @@ namespace turing_machine_solver
     }
 
     //-------------------------------------------------------------------------
+    std::string
+    solver::get_related_checker(const candidate & p_candidate) const
+    {
+        auto l_iter = m_candidate_to_checkers.find(p_candidate);
+        if(l_iter == m_candidate_to_checkers.end())
+        {
+            throw quicky_exception::quicky_logic_exception("Bad candidate", __LINE__, __FILE__);
+        }
+        return l_iter->second;
+    }
+
+    //-------------------------------------------------------------------------
     void
-    solver::analyze_result(const candidate & p_candidate
+    solver::analyze_result(const std::string & p_checker
                           ,unsigned int p_checker_index
                           ,bool l_result
                           )
@@ -198,13 +214,8 @@ namespace turing_machine_solver
                                                           , __FILE__
                                                           );
         }
-        auto l_iter = m_candidate_to_checkers.find(p_candidate);
-        if(l_iter == m_candidate_to_checkers.end())
-        {
-            throw quicky_exception::quicky_logic_exception("Bad candidate", __LINE__, __FILE__);
-        }
-        assert(l_iter->second.size() > p_checker_index);
-        unsigned char l_checker_state = l_iter->second[p_checker_index];
+        assert(p_checker.size() > p_checker_index);
+        unsigned char l_checker_state = p_checker[p_checker_index];
         std::vector<std::string> l_bad_checkers;
         std::vector<candidate> l_bad_candidates;
         for(const auto & l_iter_candidate: m_candidate_to_checkers)
