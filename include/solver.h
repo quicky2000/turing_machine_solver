@@ -746,6 +746,152 @@ namespace turing_machine_solver
                           )
                          }
                         );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<2>
+                          (21
+                          ,"Un chiffre est prsent exactement 2 fois dans le code"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {unsigned int l_repeat[5] = {0,0,0,0,0};
+                                          l_repeat[p_candidate.get_blue_triangle()]++;
+                                          l_repeat[p_candidate.get_yellow_square()]++;
+                                          l_repeat[p_candidate.get_purple_circle()]++;
+                                         return l_repeat[p_candidate.get_blue_triangle()] != 2 && l_repeat[p_candidate.get_yellow_square()] != 2 && l_repeat[p_candidate.get_purple_circle()] != 2;
+                                         }
+                                        ,"Pas de paire"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {unsigned int l_repeat[5] = {0,0,0,0,0};
+                              l_repeat[p_candidate.get_blue_triangle()]++;
+                              l_repeat[p_candidate.get_yellow_square()]++;
+                              l_repeat[p_candidate.get_purple_circle()]++;
+                              return l_repeat[p_candidate.get_blue_triangle()] == 2 || l_repeat[p_candidate.get_yellow_square()] == 2 || l_repeat[p_candidate.get_purple_circle()] == 2;
+                             }
+                            ,"Une paire"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<3>
+                          (25
+                          ,"Il y a une suite croissante ou decroissante de chiffres"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return !((p_candidate.get_blue_triangle() < p_candidate.get_yellow_square() && p_candidate.get_yellow_square() < p_candidate.get_purple_circle()) ||
+                                                   (p_candidate.get_blue_triangle() > p_candidate.get_yellow_square() && p_candidate.get_yellow_square() > p_candidate.get_purple_circle())
+                                                  );
+                                         }
+                                        ,"Pas de suite croissante ou decroissante de chiffre"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return ((p_candidate.get_blue_triangle() < p_candidate.get_yellow_square()) && !(p_candidate.get_yellow_square() < p_candidate.get_purple_circle())) ||
+                                     (!(p_candidate.get_blue_triangle() < p_candidate.get_yellow_square()) && (p_candidate.get_yellow_square() < p_candidate.get_purple_circle())) ||
+                                     ((p_candidate.get_blue_triangle() > p_candidate.get_yellow_square()) && !(p_candidate.get_yellow_square() > p_candidate.get_purple_circle())) ||
+                                     (!(p_candidate.get_blue_triangle() > p_candidate.get_yellow_square()) && (p_candidate.get_yellow_square() > p_candidate.get_purple_circle()))
+                                     ;
+			     }
+                            ,"2 chiffres en ordre croissant ou decroissant"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return ((p_candidate.get_blue_triangle() < p_candidate.get_yellow_square() && p_candidate.get_yellow_square() < p_candidate.get_purple_circle()) ||
+                                      (p_candidate.get_blue_triangle() > p_candidate.get_yellow_square() && p_candidate.get_yellow_square() > p_candidate.get_purple_circle())
+                                     );
+                             }
+                             , "3 chiffres en ordre croissant ou decroissant"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<3>
+                          (28
+                          ,"Une couleur specifique est egale a 1"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return p_candidate.get_blue_triangle() == 1;}
+                                        ,"Bleu egal a 1"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_yellow_square() == 1;}
+                            ,"Jaune egal a 1"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_purple_circle() == 1;}
+                             , "Violet est egal a 1"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<3>
+                          (35
+                          ,"Quelle couleur a le chiffre plus grand ( ou a egalite avec le chiffre le plus grand )"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return p_candidate.get_blue_triangle() >= p_candidate.get_yellow_square()
+                                             &&  p_candidate.get_blue_triangle() >= p_candidate.get_purple_circle();
+                                         }
+                                        ,"bleu >= (jaune && violet)"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_yellow_square() >= p_candidate.get_purple_circle()
+                                  && p_candidate.get_yellow_square() >= p_candidate.get_blue_triangle();
+                             }
+                            ,"jaune >= (bleu && violeti)"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_purple_circle() >= p_candidate.get_yellow_square()
+                                  && p_candidate.get_purple_circle() >= p_candidate.get_blue_triangle();}
+                             , "violet >= (jaune && bleu)"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<9>
+                          (48
+                          ,"Une couleur specifique comparee a une autre couleur specifique"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return p_candidate.get_blue_triangle() < p_candidate.get_yellow_square();}
+                                        ,"bleu < jaune"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_blue_triangle() < p_candidate.get_purple_circle();}
+                            ,"bleu < violet"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_yellow_square() < p_candidate.get_purple_circle();}
+                            , "jaune < violet"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_blue_triangle() == p_candidate.get_yellow_square();}
+                            ,"jaune = violet"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_blue_triangle() == p_candidate.get_purple_circle();}
+                            ,"bleu = violet"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_yellow_square() == p_candidate.get_purple_circle();}
+                            , "jaune = violet"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_blue_triangle() > p_candidate.get_yellow_square();}
+                            ,"jaune > violet"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_blue_triangle() > p_candidate.get_purple_circle();}
+                            ,"bleu > violet"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_yellow_square() > p_candidate.get_purple_circle();}
+                            , "jaune > violet"
+                            }
+                           }
+                          )
+                         }
+                        );
     }
 
     //-------------------------------------------------------------------------
