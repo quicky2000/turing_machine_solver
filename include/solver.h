@@ -824,6 +824,38 @@ namespace turing_machine_solver
                          }
                         );
         register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<6>
+                          (33
+                          ,"Une couleur specifique est paire ou impaire"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return !(p_candidate.get_blue_triangle() % 2);}
+                                        ,"bleu est pair"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return !(p_candidate.get_yellow_square() % 2);}
+                            ,"jaune est pair"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return !(p_candidate.get_purple_circle() % 2);}
+                             , "violet est pair"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return (p_candidate.get_blue_triangle() % 2);}
+                            ,"bleu est impair"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return (p_candidate.get_yellow_square() % 2);}
+                            ,"jaune est impair"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return (p_candidate.get_purple_circle() % 2);}
+                             , "violet est impair"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
                          {new checker_base<3>
                           (35
                           ,"Quelle couleur a le chiffre plus grand ( ou a egalite avec le chiffre le plus grand )"
@@ -843,6 +875,44 @@ namespace turing_machine_solver
                              {return p_candidate.get_purple_circle() >= p_candidate.get_yellow_square()
                                   && p_candidate.get_purple_circle() >= p_candidate.get_blue_triangle();}
                              , "violet >= (jaune && bleu)"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<6>
+                          (42
+                          ,"Quelle couleur est le plus petit ou le plus grand"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return p_candidate.get_blue_triangle() < p_candidate.get_yellow_square()
+                                             &&  p_candidate.get_blue_triangle() < p_candidate.get_purple_circle();}
+                                        ,"bleu < (jaune && violet)"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_yellow_square() < p_candidate.get_purple_circle()
+                                  && p_candidate.get_yellow_square() < p_candidate.get_blue_triangle();}
+                            ,"jaune < (bleu && violeti)"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_purple_circle() < p_candidate.get_yellow_square()
+                                  && p_candidate.get_purple_circle() < p_candidate.get_blue_triangle();}
+                             , "violet < (jaune && bleu)"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_blue_triangle() > p_candidate.get_yellow_square()
+                                 &&  p_candidate.get_blue_triangle() > p_candidate.get_purple_circle();}
+                             ,"bleu > (jaune && violet)"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_yellow_square() > p_candidate.get_purple_circle()
+                                  && p_candidate.get_yellow_square() > p_candidate.get_blue_triangle();}
+                            ,"jaune > (bleu && violeti)"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_purple_circle() > p_candidate.get_yellow_square()
+                                  && p_candidate.get_purple_circle() > p_candidate.get_blue_triangle();}
+                             , "violet > (jaune && bleu)"
                             }
                            }
                           )
