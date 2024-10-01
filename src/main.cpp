@@ -26,10 +26,21 @@ int main(int argc,char ** argv)
     try
     {
         std::cout << "How many checkers ?" << std::endl;
-        int nb_checkers;
+        unsigned int nb_checkers;
         std::cin >> nb_checkers;
         std::cout << "You define " << nb_checkers << " checkers" << std::endl;
-        turing_machine_solver::solver l_solver(nb_checkers);
+
+        solver::register_all_checkers();
+        std::vector<unsigned int> l_checkers_id;
+        do
+        {
+            solver::display_all_checkers();
+            unsigned int l_id;
+            std::cin >> l_id;
+            l_checkers_id.emplace_back(l_id);
+        } while (l_checkers_id.size() < nb_checkers);
+
+        turing_machine_solver::solver l_solver(l_checkers_id);
 
         do
         {

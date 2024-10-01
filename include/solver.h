@@ -32,7 +32,7 @@ namespace turing_machine_solver
     {
     public:
         inline explicit
-        solver(unsigned int p_nb_checkers);
+        solver(const std::vector<unsigned int> & p_checkers_id);
 
         inline static
         std::shared_ptr<checker_if>
@@ -54,6 +54,14 @@ namespace turing_machine_solver
         std::string
         get_related_checker(const candidate & p_candidate) const;
 
+        inline static
+        void
+        display_all_checkers();
+
+        inline static
+        void
+        register_all_checkers();
+
     private:
 
         inline
@@ -71,10 +79,6 @@ namespace turing_machine_solver
         inline
         void
         compute_potential_checkers(unsigned int p_max_grade);
-
-        inline static
-        void
-        register_all_checkers();
 
         inline static
         void
@@ -110,28 +114,25 @@ namespace turing_machine_solver
     };
 
     //-------------------------------------------------------------------------
-    solver::solver(unsigned int p_nb_checkers)
+    solver::solver(const std::vector<unsigned int> & p_checkers_id)
     {
         if(m_all_checkers.empty())
         {
-            register_all_checkers();
+            throw quicky_exception::quicky_logic_exception("Checkers have not been registered"
+                                                          ,__LINE__
+                                                          ,__FILE__
+                                                          );
         }
 
         unsigned int l_max_grade = 0;
-        do
+        for(const auto & l_iter_id: p_checkers_id)
         {
-            for(const auto & l_iter: m_all_checkers)
-            {
-                std::cout << l_iter.first << " " << l_iter.second->get_name() << std::endl;
-            }
-            unsigned int l_id;
-            std::cin >> l_id;
-            m_checkers.emplace_back(get_checker(l_id));
+            m_checkers.emplace_back(get_checker(l_iter_id));
             if(l_max_grade < m_checkers.back()->get_grade())
             {
                 l_max_grade = m_checkers.back()->get_grade();
             }
-        } while (m_checkers.size() < p_nb_checkers);
+        }
 
         std::vector<combinatorics::symbol> l_symbols{{1,5}, {2, 5}, {3, 5}, {4, 5}, {5, 5}};
         combinatorics::enumerator l_enumerator{l_symbols, 3};
@@ -178,10 +179,24 @@ namespace turing_machine_solver
 
     //-------------------------------------------------------------------------
     void
+    solver::display_all_checkers()
+    {
+        for(const auto & l_iter: m_all_checkers)
+        {
+            std::cout << l_iter.first << " " << l_iter.second->get_name() << std::endl;
+        }
+    }
+
+    //-------------------------------------------------------------------------
+    void
     solver::display_remaining()
     {
         std::cout << m_candidate_to_checkers.size() << " candidates remaining" << std::endl;
         std::cout << m_checkers_to_candidate.size() << " checkers combinations remaining" << std::endl;
+        if(m_candidate_to_checkers.size() == 1)
+        {
+            std::cout << "SOLUTION FOUND :";
+        }
         for(const auto & l_iter: m_candidate_to_checkers)
         {
             std::cout << l_iter.first << " -> " << l_iter.second << std::endl;
