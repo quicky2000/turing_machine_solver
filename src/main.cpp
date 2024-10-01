@@ -16,6 +16,7 @@
 */
 #include "solver.h"
 #include "quicky_exception.h"
+#include "ask.h"
 #include <iostream>
 
 using namespace turing_machine_solver;
@@ -25,9 +26,11 @@ int main(int argc,char ** argv)
 {
     try
     {
+        std::string l_input_values{argc == 2 ? argv[1] : ""};
+        ask l_ask{l_input_values};
+
         std::cout << "How many checkers ?" << std::endl;
-        unsigned int nb_checkers;
-        std::cin >> nb_checkers;
+        unsigned int nb_checkers{l_ask.next<unsigned int>()};
         std::cout << "You define " << nb_checkers << " checkers" << std::endl;
 
         solver::register_all_checkers();
@@ -35,8 +38,7 @@ int main(int argc,char ** argv)
         do
         {
             solver::display_all_checkers();
-            unsigned int l_id;
-            std::cin >> l_id;
+            unsigned int l_id{l_ask.next<unsigned int>()};
             l_checkers_id.emplace_back(l_id);
         } while (l_checkers_id.size() < nb_checkers);
 
@@ -44,9 +46,8 @@ int main(int argc,char ** argv)
 
         do
         {
-            unsigned int l_candidate_num;
             std::cout << "Propose a candidate ?" << std::endl;
-            std::cin >> l_candidate_num;
+            unsigned int l_candidate_num{l_ask.next<unsigned int>()};
             candidate l_candidate{l_candidate_num};
             std::string l_checker = l_solver.get_related_checker(l_candidate);
             int l_checker_index;
@@ -55,12 +56,11 @@ int main(int argc,char ** argv)
             {
                 std::cout << "Current candidate " << l_candidate << " -> " << l_checker << std::endl;
                 std::cout << "Checker index ? ( -1 to propose a new candidate)" << std::endl;
-                std::cin >> l_checker_index;
+                l_checker_index = l_ask.next<int>();
                 if(l_checker_index != -1)
                 {
                     std::cout << "Checker result ?" << std::endl;
-                    bool l_result;
-                    std::cin >> l_result;
+                    bool l_result{static_cast<bool>(l_ask.next<unsigned int>())};
                     std::cout << "You entered result " << l_result << std::endl;
                     --l_remaining_check;
                     l_solver.analyze_result(l_checker, static_cast<unsigned int>(l_checker_index), l_result);

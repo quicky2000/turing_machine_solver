@@ -8,6 +8,7 @@ set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_CXX_STANDARD 20)
 
 set(MY_SOURCE_FILES
+        include/ask.h
         include/candidate.h
         include/checker_func.h
         include/checker_if.h
