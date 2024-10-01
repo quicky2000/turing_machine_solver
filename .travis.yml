@@ -51,9 +51,9 @@ before_install:
 script:
 # quicky_tools do not support CUDA
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then generate_makefile turing_machine_solver; make; fi
-#  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then run_test.py $MY_LOCATION/repositories/turing_machine_solver/tests; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then run_test.py $MY_LOCATION/repositories/turing_machine_solver/tests; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd $MY_LOCATION ; mkdir cmake_build ; cd cmake_build ; fi
   - cmake $QUICKY_REPOSITORY/turing_machine_solver
   - make
-  #  - run_test.py $MY_LOCATION/repositories/turing_machine_solver/tests; fi
+  - run_test.py $MY_LOCATION/repositories/turing_machine_solver/tests
 #EOF
