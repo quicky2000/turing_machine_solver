@@ -18,6 +18,7 @@
 #ifndef TURING_MACHINE_SOLVER_SOLVER_H
 #define TURING_MACHINE_SOLVER_SOLVER_H
 
+#include "potential_checkers.h"
 #include "checker_base.h"
 #include "enumerator.h"
 #include "quicky_exception.h"
@@ -256,13 +257,14 @@ namespace turing_machine_solver
     std::string
     solver::get_correct_conditions(const candidate & p_candidate)
     {
-        std::string l_result;
+        potential_checkers l_result;
         for(const auto & l_iter:m_checkers)
         {
-            auto l_single_result{l_iter->get_correct_condition(p_candidate)};
-            l_result += l_single_result ? static_cast<char>(static_cast<unsigned int>('0') + *l_single_result) : '-';
+            l_result.add(l_iter->get_correct_conditions(p_candidate));
         }
-        return l_result;
+        std::stringstream l_stream;
+        l_stream << l_result;
+        return l_stream.str();
     }
 
     //-------------------------------------------------------------------------

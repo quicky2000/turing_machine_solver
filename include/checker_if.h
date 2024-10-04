@@ -19,7 +19,7 @@
 #define TURING_MACHINE_SOLVER_CHECKER_IF_H
 
 #include <string>
-#include <optional>
+#include <set>
 
 namespace turing_machine_solver
 {
@@ -55,8 +55,8 @@ namespace turing_machine_solver
          */
         [[nodiscard]]
         virtual
-        std::optional<unsigned int>
-        get_correct_condition(const candidate & p_candidate) const = 0;
+        std::set<unsigned int>
+        get_correct_conditions(const candidate & p_candidate) const = 0;
 
     private:
     };

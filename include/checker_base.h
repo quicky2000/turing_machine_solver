@@ -59,8 +59,8 @@ namespace turing_machine_solver
          * @return index of condition which return true
          */
         [[nodiscard]] inline
-        std::optional<unsigned int>
-        get_correct_condition(const candidate & p_candidate) const override;
+        std::set<unsigned int>
+        get_correct_conditions(const candidate & p_candidate) const override;
 
     private:
         unsigned int m_id;
@@ -95,17 +95,18 @@ namespace turing_machine_solver
 
     //-------------------------------------------------------------------------
     template <unsigned int GRADE>
-    std::optional<unsigned int>
-    checker_base<GRADE>::get_correct_condition(const candidate & p_candidate) const
+    std::set<unsigned int>
+    checker_base<GRADE>::get_correct_conditions(const candidate & p_candidate) const
     {
+        std::set<unsigned int> l_result;
         for(unsigned int l_index = 0; l_index < GRADE; ++l_index)
         {
             if(run(l_index, p_candidate))
             {
-                return l_index;
+                l_result.insert(l_index);
             }
         }
-        return {};
+        return l_result;
     }
 
     //-------------------------------------------------------------------------
