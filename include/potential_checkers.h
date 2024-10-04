@@ -18,10 +18,14 @@
 #ifndef TURING_MACHINE_SOLVER_POTENTIAL_CHECKERS_H
 #define TURING_MACHINE_SOLVER_POTENTIAL_CHECKERS_H
 
+#include "quicky_exception.h"
+#include <cassert>
 #include <ostream>
 #include <vector>
 #include <set>
 #include <sstream>
+#include <algorithm>
+
 namespace turing_machine_solver
 {
     class potential_checkers
@@ -36,6 +40,21 @@ namespace turing_machine_solver
         void
         add(std::set<unsigned int> && p_value);
 
+        [[nodiscard]] inline
+        bool
+        is_valid() const;
+
+        [[nodiscard]] inline
+        bool
+        is_compliant_with(unsigned int p_index
+                         ,const potential_checkers & p_checkers
+                         ,bool l_checker_result
+                         ) const;
+
+        inline
+        bool
+        operator<(const potential_checkers & p_checkers) const;
+
     private:
 
         std::vector<std::set<unsigned int>> m_content;
@@ -46,6 +65,81 @@ namespace turing_machine_solver
     potential_checkers::add(std::set<unsigned int> && p_value)
     {
         m_content.emplace_back(std::move(p_value));
+    }
+
+    //-------------------------------------------------------------------------
+    bool
+    potential_checkers::is_valid() const
+    {
+        return std::all_of(m_content.begin()
+                          ,m_content.end()
+                          ,[](const std::set<unsigned int> & p_item)
+                             {return !p_item.empty();}
+                          );
+    }
+
+    //-------------------------------------------------------------------------
+    bool
+    potential_checkers::is_compliant_with(unsigned int p_index
+                                         ,const potential_checkers & p_checkers
+                                         ,bool p_checker_result
+                                         ) const
+    {
+        assert(m_content.size() == p_checkers.m_content.size());
+        if(p_index < m_content.size())
+        {
+            if(m_content[p_index] == p_checkers.m_content[p_index])
+            {
+                return p_checker_result;
+            }
+            else
+            {
+                std::vector<unsigned int> l_intersection;
+                std::set_intersection(m_content[p_index].begin()
+                                     ,m_content[p_index].end()
+                                     ,p_checkers.m_content[p_index].begin()
+                                     ,p_checkers.m_content[p_index].end()
+                                     ,std::back_inserter(l_intersection)
+                                     );
+                if(l_intersection.empty())
+                {
+                    return !p_checker_result;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+        throw quicky_exception::quicky_logic_exception("Bad index " + std::to_string(p_index)
+                                                      ,__LINE__
+                                                      ,__FILE__
+                                                      );
+    }
+
+    //-------------------------------------------------------------------------
+    bool
+    potential_checkers::operator<(const potential_checkers & p_checkers) const
+    {
+        assert(m_content.size() == p_checkers.m_content.size());
+        for(unsigned int l_index = 0; l_index < m_content.size(); l_index++)
+        {
+            if(!std::equal(m_content[l_index].begin()
+                          ,m_content[l_index].end()
+                          ,p_checkers.m_content[l_index].begin()
+                          ,p_checkers.m_content[l_index].end()
+                          )
+              )
+            {
+                return std::lexicographical_compare(m_content[l_index].begin()
+                                                   ,m_content[l_index].end()
+                                                   ,p_checkers.m_content[l_index].begin()
+                                                   ,p_checkers.m_content[l_index].end()
+                                                   );
+            }
+
+        }
+        return false;
     }
 
     //-------------------------------------------------------------------------

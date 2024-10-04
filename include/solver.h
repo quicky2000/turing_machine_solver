@@ -46,14 +46,14 @@ namespace turing_machine_solver
 
         inline
         void
-        analyze_result(const std::string & p_checker
+        analyze_result(const potential_checkers & p_checkers
                       ,unsigned int p_checker_index
                       ,bool l_result
                       );
 
         [[nodiscard]] inline
-        std::string
-        get_related_checker(const candidate & p_candidate) const;
+        potential_checkers
+        get_related_checkers(const candidate & p_candidate) const;
 
         inline static
         void
@@ -70,7 +70,7 @@ namespace turing_machine_solver
         display_remaining();
 
         [[nodiscard]] inline
-        std::string
+        potential_checkers
         get_correct_conditions(const candidate & p_candidate);
 
         /**
@@ -96,8 +96,8 @@ namespace turing_machine_solver
         inline
         void
         relate_candidate_checker(const candidate & p_candidate
-                                ,const std::string & p_checkers
-                                ,std::set<std::string> & p_bad_checkers
+                                ,const potential_checkers & p_checkers
+                                ,std::set<potential_checkers> & p_bad_checkers
                                 ,std::set<candidate> & p_candidate_with_bad_checkers
                                 );
 
@@ -107,9 +107,9 @@ namespace turing_machine_solver
 
         std::set<std::string> m_potential_checkers;
 
-        std::map<candidate, std::string> m_candidate_to_checkers;
+        std::map<candidate, potential_checkers> m_candidate_to_checkers;
 
-        std::map<std::string, candidate> m_checkers_to_candidate;
+        std::map<potential_checkers, candidate> m_checkers_to_candidate;
 
         inline static std::map<unsigned int, std::shared_ptr<checker_if>> m_all_checkers;
     };
@@ -148,12 +148,12 @@ namespace turing_machine_solver
         // Test every candidate with all checkers to restrain candidates
         std::cout << "Candidates matching with checkers:" << std::endl;
         std::vector<candidate> l_bad_candidates;
-        std::set<std::string> l_bad_checkers;
+        std::set<potential_checkers> l_bad_checkers;
         std::set<candidate> l_candidate_with_bad_checkers;
         for(const auto & l_iter: m_candidates)
         {
-            std::string l_result = get_correct_conditions(l_iter);
-            if(l_result.find('-') == std::string::npos)
+            auto l_result = get_correct_conditions(l_iter);
+            if(l_result.is_valid())
             {
                 std::cout << l_iter << "->" << l_result << std::endl;
                 relate_candidate_checker(l_iter, l_result, l_bad_checkers, l_candidate_with_bad_checkers);
@@ -205,8 +205,8 @@ namespace turing_machine_solver
     }
 
     //-------------------------------------------------------------------------
-    std::string
-    solver::get_related_checker(const candidate & p_candidate) const
+    potential_checkers
+    solver::get_related_checkers(const candidate & p_candidate) const
     {
         auto l_iter = m_candidate_to_checkers.find(p_candidate);
         if(l_iter == m_candidate_to_checkers.end())
@@ -218,25 +218,23 @@ namespace turing_machine_solver
 
     //-------------------------------------------------------------------------
     void
-    solver::analyze_result(const std::string & p_checker
+    solver::analyze_result(const potential_checkers & p_checkers
                           ,unsigned int p_checker_index
                           ,bool l_result
                           )
     {
         if(p_checker_index > m_checkers.size())
         {
-            throw quicky_exception::quicky_logic_exception("Bad checker value " + std::to_string(p_checker_index) + ", should be in range [0," + std::to_string(m_checkers.size() - 1)
+            throw quicky_exception::quicky_logic_exception("Bad checker value " + std::to_string(p_checker_index) + ", should be in range [0," + std::to_string(m_checkers.size() - 1) + ']'
                                                           , __LINE__
                                                           , __FILE__
                                                           );
         }
-        assert(p_checker.size() > p_checker_index);
-        unsigned char l_checker_state = p_checker[p_checker_index];
-        std::vector<std::string> l_bad_checkers;
+        std::vector<potential_checkers> l_bad_checkers;
         std::vector<candidate> l_bad_candidates;
         for(const auto & l_iter_candidate: m_candidate_to_checkers)
         {
-            if((l_iter_candidate.second[p_checker_index] == l_checker_state) ^ l_result)
+            if(!l_iter_candidate.second.is_compliant_with(p_checker_index, p_checkers, l_result))
             {
                 l_bad_checkers.emplace_back(l_iter_candidate.second);
                 l_bad_candidates.emplace_back(l_iter_candidate.first);
@@ -254,7 +252,7 @@ namespace turing_machine_solver
     }
 
     //-------------------------------------------------------------------------
-    std::string
+    potential_checkers
     solver::get_correct_conditions(const candidate & p_candidate)
     {
         potential_checkers l_result;
@@ -262,9 +260,7 @@ namespace turing_machine_solver
         {
             l_result.add(l_iter->get_correct_conditions(p_candidate));
         }
-        std::stringstream l_stream;
-        l_stream << l_result;
-        return l_stream.str();
+        return l_result;
     }
 
     //-------------------------------------------------------------------------
@@ -1004,8 +1000,8 @@ namespace turing_machine_solver
     //-------------------------------------------------------------------------
     void
     solver::relate_candidate_checker(const candidate & p_candidate
-                                    ,const std::string & p_checkers
-                                    ,std::set<std::string> & p_bad_checkers
+                                    ,const potential_checkers & p_checkers
+                                    ,std::set<potential_checkers> & p_bad_checkers
                                     ,std::set<candidate> & p_candidate_with_bad_checkers
                                     )
     {
@@ -1015,8 +1011,8 @@ namespace turing_machine_solver
         {
             if(!p_bad_checkers.contains(p_checkers))
             {
-                m_candidate_to_checkers.insert(make_pair(p_candidate, p_checkers));
-                m_checkers_to_candidate.insert(make_pair(p_checkers, p_candidate));
+                m_candidate_to_checkers.insert(std::make_pair(p_candidate, p_checkers));
+                m_checkers_to_candidate.insert(std::make_pair(p_checkers, p_candidate));
             }
         }
         else
