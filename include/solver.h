@@ -787,6 +787,56 @@ namespace turing_machine_solver
                         );
         register_checker(std::shared_ptr<checker_if>
                          {new checker_base<3>
+                          (23
+                          ,"La somme de tous les chiffres comparee a 6"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return (p_candidate.get_blue_triangle() + p_candidate.get_yellow_square() + p_candidate.get_purple_circle()) < 6;}
+                                        ,"La somme est plus petite que 6"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return (p_candidate.get_blue_triangle() + p_candidate.get_yellow_square() + p_candidate.get_purple_circle()) == 6;}
+                            ,"La omme est egale a 6"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return (p_candidate.get_blue_triangle() + p_candidate.get_yellow_square() + p_candidate.get_purple_circle()) > 6;}
+                             , "La somme est superieure a 6"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<3>
+                          (24
+                          ,"Il y a une suite croissante de chiffres consecutifs"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return ((p_candidate.get_blue_triangle() == (p_candidate.get_yellow_square() - 1))
+                                               && (p_candidate.get_yellow_square() == (p_candidate.get_purple_circle() - 1))
+                                                 );
+                                         }
+                                        ,"3 chiffres en ordre croissant consecutifs"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return ((p_candidate.get_blue_triangle() == (p_candidate.get_yellow_square() - 1)) 
+                                    ^ (p_candidate.get_yellow_square() == (p_candidate.get_purple_circle() - 1))
+                                     );
+                                     ;
+			     }
+                            ,"2 chiffres en ordre croissant consecutif"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return ((p_candidate.get_blue_triangle() != (p_candidate.get_yellow_square() - 1)) 
+                                   && (p_candidate.get_yellow_square() != (p_candidate.get_purple_circle() - 1))
+                                     );
+                             }
+                             ,"Pas de chiffres en ordre croissant consecutif"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<3>
                           (25
                           ,"Il y a une suite croissante ou decroissante de chiffres"
                           ,{checker_func{[](const candidate &p_candidate) -> bool
@@ -863,6 +913,31 @@ namespace turing_machine_solver
                            ,{[](const candidate &p_candidate) -> bool
                              {return (p_candidate.get_purple_circle() % 2);}
                              , "violet est impair"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<3>
+                          (34
+                          ,"Quelle couleur a le chiffre plus petit ( ou a egalite avec le chiffre le plus petit )"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return p_candidate.get_blue_triangle() <= p_candidate.get_yellow_square()
+                                             &&  p_candidate.get_blue_triangle() <= p_candidate.get_purple_circle();
+                                         }
+                                        ,"bleu <= (jaune && violet)"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_yellow_square() <= p_candidate.get_purple_circle()
+                                  && p_candidate.get_yellow_square() <= p_candidate.get_blue_triangle();
+                             }
+                            ,"jaune <= (bleu && violeti)"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_purple_circle() <= p_candidate.get_yellow_square()
+                                  && p_candidate.get_purple_circle() <= p_candidate.get_blue_triangle();}
+                             , "violet <= (jaune && bleu)"
                             }
                            }
                           )
