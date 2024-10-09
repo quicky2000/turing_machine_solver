@@ -417,9 +417,9 @@ namespace turing_machine_solver
                           ,"Le nombre de chiffre 1 dans le code"
                           ,{checker_func{[](const candidate &p_candidate) -> bool
                                          {return 0 == (p_candidate.get_yellow_square() == 1)
-					            + (p_candidate.get_purple_circle() == 1)
-						    + (p_candidate.get_blue_triangle() == 1);
-					 }
+                                                    + (p_candidate.get_purple_circle() == 1)
+                                                    + (p_candidate.get_blue_triangle() == 1);
+                                         }
                                         ,"pas de 1"
                                         }
                            ,{[](const candidate &p_candidate) -> bool
@@ -453,9 +453,9 @@ namespace turing_machine_solver
                           ,"Le nombre de chiffre 3 dans le code"
                           ,{checker_func{[](const candidate &p_candidate) -> bool
                                          {return 0 == (p_candidate.get_yellow_square() == 3)
-					            + (p_candidate.get_purple_circle() == 3)
-						    + (p_candidate.get_blue_triangle() == 3);
-					 }
+                                                    + (p_candidate.get_purple_circle() == 3)
+                                                    + (p_candidate.get_blue_triangle() == 3);
+                                         }
                                         ,"pas de 3"
                                         }
                            ,{[](const candidate &p_candidate) -> bool
@@ -489,9 +489,9 @@ namespace turing_machine_solver
                           ,"Le nombre de chiffre 4 dans le code"
                           ,{checker_func{[](const candidate &p_candidate) -> bool
                                          {return 0 == (p_candidate.get_yellow_square() == 4)
-					            + (p_candidate.get_purple_circle() == 4)
-						    + (p_candidate.get_blue_triangle() == 4);
-					 }
+                                                    + (p_candidate.get_purple_circle() == 4)
+                                                    + (p_candidate.get_blue_triangle() == 4);
+                                         }
                                         ,"pas de 4"
                                         }
                            ,{[](const candidate &p_candidate) -> bool
@@ -585,12 +585,12 @@ namespace turing_machine_solver
                           ,"Quelle couleur a le chiffre plus petit que les autres"
                           ,{checker_func{[](const candidate &p_candidate) -> bool
                                          {return p_candidate.get_blue_triangle() < p_candidate.get_yellow_square()
-					     &&  p_candidate.get_blue_triangle() < p_candidate.get_purple_circle();}
+                                             &&  p_candidate.get_blue_triangle() < p_candidate.get_purple_circle();}
                                         ,"bleu < (jaune && violet)"
                                         }
                            ,{[](const candidate &p_candidate) -> bool
                              {return p_candidate.get_yellow_square() < p_candidate.get_purple_circle()
-			          && p_candidate.get_yellow_square() < p_candidate.get_blue_triangle();}
+                                  && p_candidate.get_yellow_square() < p_candidate.get_blue_triangle();}
                             ,"jaune < (bleu && violeti)"
                             }
                            ,{[](const candidate &p_candidate) -> bool
@@ -608,12 +608,12 @@ namespace turing_machine_solver
                           ,"Quelle couleur a le chiffre plus grand que les autres"
                           ,{checker_func{[](const candidate &p_candidate) -> bool
                                          {return p_candidate.get_blue_triangle() > p_candidate.get_yellow_square()
-					     &&  p_candidate.get_blue_triangle() > p_candidate.get_purple_circle();}
+                                             &&  p_candidate.get_blue_triangle() > p_candidate.get_purple_circle();}
                                         ,"bleu > (jaune && violet)"
                                         }
                            ,{[](const candidate &p_candidate) -> bool
                              {return p_candidate.get_yellow_square() > p_candidate.get_purple_circle()
-			          && p_candidate.get_yellow_square() > p_candidate.get_blue_triangle();}
+                                  && p_candidate.get_yellow_square() > p_candidate.get_blue_triangle();}
                             ,"jaune > (bleu && violeti)"
                             }
                            ,{[](const candidate &p_candidate) -> bool
@@ -631,18 +631,18 @@ namespace turing_machine_solver
                           ,"Le nombre de chiffres pairs compare au nombre de chiffres impairs"
                           ,{checker_func{[](const candidate &p_candidate) -> bool
                                          {unsigned int l_nb_impair = (p_candidate.get_purple_circle() % 2) +
-					                             (p_candidate.get_yellow_square() % 2) +
-								     (p_candidate.get_blue_triangle() % 2);
+                                                                     (p_candidate.get_yellow_square() % 2) +
+                                                                     (p_candidate.get_blue_triangle() % 2);
                                           return 3 - l_nb_impair > l_nb_impair;
-					 }
+                                         }
                                         ,"Pair > Impair"
                                         }
                            ,{[](const candidate &p_candidate) -> bool
                              {unsigned int l_nb_impair = (p_candidate.get_purple_circle() % 2) +
-			                                 (p_candidate.get_yellow_square() % 2) +
-			                                 (p_candidate.get_blue_triangle() % 2);
+                                                         (p_candidate.get_yellow_square() % 2) +
+                                                         (p_candidate.get_blue_triangle() % 2);
                               return 3 - l_nb_impair < l_nb_impair;
-			     }
+                             }
                             ,"Pair < impair"
                             }
                            }
@@ -655,9 +655,9 @@ namespace turing_machine_solver
                           ,"Le nombre de chiffre pair dans le code"
                           ,{checker_func{[](const candidate &p_candidate) -> bool
                                          {return 3 == (p_candidate.get_yellow_square() % 2)
-					            + (p_candidate.get_purple_circle() % 2)
-						    + (p_candidate.get_blue_triangle() % 2);
-					 }
+                                                    + (p_candidate.get_purple_circle() % 2)
+                                                    + (p_candidate.get_blue_triangle() % 2);
+                                         }
                                         ,"aucun chiffre pair"
                                         }
                            ,{[](const candidate &p_candidate) -> bool
@@ -691,19 +691,19 @@ namespace turing_machine_solver
                           ,"La somme de tous les chiffres est paire ou impaire"
                           ,{checker_func{[](const candidate &p_candidate) -> bool
                                          {return !((p_candidate.get_yellow_square()
-					          + p_candidate.get_purple_circle()
-						  + p_candidate.get_blue_triangle()
+                                                  + p_candidate.get_purple_circle()
+                                                  + p_candidate.get_blue_triangle()
                                                    ) % 2
                                                   );
-					 }
+                                         }
                                         ,"La somme des chiffres est paire"
                                         }
                            ,{[](const candidate &p_candidate) -> bool
                              {return ((p_candidate.get_yellow_square()
                                      + p_candidate.get_purple_circle()
                                      + p_candidate.get_blue_triangle()
-				      ) % 2
-				     );
+                                      ) % 2
+                                     );
                              }
                             ,"La somme des chiffres est impaire"
                             }
@@ -741,16 +741,16 @@ namespace turing_machine_solver
                                         }
                            ,{[](const candidate &p_candidate) -> bool
                              {return 2 == ((p_candidate.get_blue_triangle() == p_candidate.get_yellow_square()) +
-					   (p_candidate.get_blue_triangle() == p_candidate.get_purple_circle()) +
-			                   (p_candidate.get_yellow_square() == p_candidate.get_purple_circle())
+                                           (p_candidate.get_blue_triangle() == p_candidate.get_purple_circle()) +
+                                           (p_candidate.get_yellow_square() == p_candidate.get_purple_circle())
                                           );
-			     }
+                             }
                             ,"un chiffre double"
                             }
                            ,{[](const candidate &p_candidate) -> bool
                              {return (p_candidate.get_blue_triangle() != p_candidate.get_yellow_square() &&
                                       p_candidate.get_blue_triangle() != p_candidate.get_purple_circle() &&
-				      p_candidate.get_yellow_square() != p_candidate.get_purple_circle()
+                                      p_candidate.get_yellow_square() != p_candidate.get_purple_circle()
                                      );
                              }
                              , "pas de repetition"
@@ -821,7 +821,7 @@ namespace turing_machine_solver
                                     ^ (p_candidate.get_yellow_square() == (p_candidate.get_purple_circle() - 1))
                                      );
                                      ;
-			     }
+                             }
                             ,"2 chiffres en ordre croissant consecutif"
                             }
                            ,{[](const candidate &p_candidate) -> bool
@@ -852,7 +852,7 @@ namespace turing_machine_solver
                                      ((p_candidate.get_blue_triangle() > p_candidate.get_yellow_square()) && !(p_candidate.get_yellow_square() > p_candidate.get_purple_circle())) ||
                                      (!(p_candidate.get_blue_triangle() > p_candidate.get_yellow_square()) && (p_candidate.get_yellow_square() > p_candidate.get_purple_circle()))
                                      ;
-			     }
+                             }
                             ,"2 chiffres en ordre croissant ou decroissant"
                             }
                            ,{[](const candidate &p_candidate) -> bool
