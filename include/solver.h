@@ -820,7 +820,6 @@ namespace turing_machine_solver
                              {return ((p_candidate.get_blue_triangle() == (p_candidate.get_yellow_square() - 1)) 
                                     ^ (p_candidate.get_yellow_square() == (p_candidate.get_purple_circle() - 1))
                                      );
-                                     ;
                              }
                             ,"2 chiffres en ordre croissant consecutif"
                             }
@@ -838,29 +837,29 @@ namespace turing_machine_solver
         register_checker(std::shared_ptr<checker_if>
                          {new checker_base<3>
                           (25
-                          ,"Il y a une suite croissante ou decroissante de chiffres"
+                          ,"Il y a une suite croissante ou decroissante de chiffres consecutifs"
                           ,{checker_func{[](const candidate &p_candidate) -> bool
-                                         {return !((p_candidate.get_blue_triangle() < p_candidate.get_yellow_square() && p_candidate.get_yellow_square() < p_candidate.get_purple_circle()) ||
-                                                   (p_candidate.get_blue_triangle() > p_candidate.get_yellow_square() && p_candidate.get_yellow_square() > p_candidate.get_purple_circle())
-                                                  );
+                                         {return (p_candidate.get_blue_triangle() != (p_candidate.get_yellow_square() + 1) && p_candidate.get_yellow_square() != (p_candidate.get_purple_circle() + 1) &&
+                                                  p_candidate.get_blue_triangle() != (p_candidate.get_yellow_square() - 1) && p_candidate.get_yellow_square() != (p_candidate.get_purple_circle() - 1)
+                                                 );
                                          }
-                                        ,"Pas de suite croissante ou decroissante de chiffre"
+                                        ,"Pas de suite croissante ou decroissante de chiffre consecutifs"
                                         }
                            ,{[](const candidate &p_candidate) -> bool
-                             {return ((p_candidate.get_blue_triangle() < p_candidate.get_yellow_square()) && !(p_candidate.get_yellow_square() < p_candidate.get_purple_circle())) ||
-                                     (!(p_candidate.get_blue_triangle() < p_candidate.get_yellow_square()) && (p_candidate.get_yellow_square() < p_candidate.get_purple_circle())) ||
-                                     ((p_candidate.get_blue_triangle() > p_candidate.get_yellow_square()) && !(p_candidate.get_yellow_square() > p_candidate.get_purple_circle())) ||
-                                     (!(p_candidate.get_blue_triangle() > p_candidate.get_yellow_square()) && (p_candidate.get_yellow_square() > p_candidate.get_purple_circle()))
+                             {return ((p_candidate.get_blue_triangle() == (p_candidate.get_yellow_square() - 1)) && (p_candidate.get_yellow_square() != (p_candidate.get_purple_circle() - 1))) ||
+                                     ((p_candidate.get_blue_triangle() != (p_candidate.get_yellow_square() - 1)) && (p_candidate.get_yellow_square() == (p_candidate.get_purple_circle() - 1))) ||
+                                     ((p_candidate.get_blue_triangle() == (p_candidate.get_yellow_square() + 1)) && (p_candidate.get_yellow_square() != (p_candidate.get_purple_circle() + 1))) ||
+                                     ((p_candidate.get_blue_triangle() != (p_candidate.get_yellow_square() + 1)) && (p_candidate.get_yellow_square() == (p_candidate.get_purple_circle() + 1)))
                                      ;
                              }
-                            ,"2 chiffres en ordre croissant ou decroissant"
+                            ,"2 chiffres en ordre croissant ou decroissant consecutifs"
                             }
                            ,{[](const candidate &p_candidate) -> bool
-                             {return ((p_candidate.get_blue_triangle() < p_candidate.get_yellow_square() && p_candidate.get_yellow_square() < p_candidate.get_purple_circle()) ||
-                                      (p_candidate.get_blue_triangle() > p_candidate.get_yellow_square() && p_candidate.get_yellow_square() > p_candidate.get_purple_circle())
+                             {return ((p_candidate.get_blue_triangle() == (p_candidate.get_yellow_square()  - 1) && p_candidate.get_yellow_square() == (p_candidate.get_purple_circle() - 1)) ||
+                                      (p_candidate.get_blue_triangle() == (p_candidate.get_yellow_square()  + 1) && p_candidate.get_yellow_square() == (p_candidate.get_purple_circle() + 1))
                                      );
                              }
-                             , "3 chiffres en ordre croissant ou decroissant"
+                             , "3 chiffres en ordre croissant ou decroissant consecutifs"
                             }
                            }
                           )
