@@ -886,6 +886,26 @@ namespace turing_machine_solver
                          }
                         );
         register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<3>
+                          (32
+                          ,"Une couleur specifique est plus grande que 3"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return p_candidate.get_blue_triangle() > 3;}
+                                        ,"Bleu > 3"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_yellow_square() > 3;}
+                            ,"Jaune > 3"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return p_candidate.get_purple_circle() > 3;}
+                             , "Violet > 3"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
                          {new checker_base<6>
                           (33
                           ,"Une couleur specifique est paire ou impaire"
@@ -968,6 +988,26 @@ namespace turing_machine_solver
                          }
                         );
         register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<3>
+                          (36
+                          ,"La somme de tous les chiffres est un multiple de 3 ou 4 ou 5"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {return !((p_candidate.get_blue_triangle() + p_candidate.get_yellow_square() + p_candidate.get_purple_circle()) % 3);}
+                                        ,"La somme de tous les chiffres est un multiple de 3"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return !((p_candidate.get_blue_triangle() + p_candidate.get_yellow_square() + p_candidate.get_purple_circle()) % 4);}
+                            ,"La somme de tous les chiffres est un multiple de 4"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {return !((p_candidate.get_blue_triangle() + p_candidate.get_yellow_square() + p_candidate.get_purple_circle()) % 5);}
+                             , "La somme de tous les chiffres est un multiple de 5"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
                          {new checker_base<6>
                           (42
                           ,"Quelle couleur est le plus petit ou le plus grand"
@@ -1000,6 +1040,68 @@ namespace turing_machine_solver
                              {return p_candidate.get_purple_circle() > p_candidate.get_yellow_square()
                                   && p_candidate.get_purple_circle() > p_candidate.get_blue_triangle();}
                              , "violet > (jaune && bleu)"
+                            }
+                           }
+                          )
+                         }
+                        );
+        register_checker(std::shared_ptr<checker_if>
+                         {new checker_base<6>
+                          (46
+                          ,"Combien il y a de 3 ou combien il y a de 4 dans le code"
+                          ,{checker_func{[](const candidate &p_candidate) -> bool
+                                         {uint32_t l_nb = 0;
+                                          l_nb += (p_candidate.get_blue_triangle() == 3);
+                                          l_nb += (p_candidate.get_yellow_square() == 3);
+                                          l_nb += (p_candidate.get_purple_circle() == 3);
+					  return !l_nb;
+                                         }
+                                        ,"Pas de 3"
+                                        }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {uint32_t l_nb = 0;
+                              l_nb += (p_candidate.get_blue_triangle() == 3);
+                              l_nb += (p_candidate.get_yellow_square() == 3);
+                              l_nb += (p_candidate.get_purple_circle() == 3);
+                              return 1 == l_nb;
+                             }
+                            ,"Un 3"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {uint32_t l_nb = 0;
+                              l_nb += (p_candidate.get_blue_triangle() == 3);
+                              l_nb += (p_candidate.get_yellow_square() == 3);
+                              l_nb += (p_candidate.get_purple_circle() == 3);
+                              return 2 == l_nb;
+                             }
+                             , "Deux 3"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {uint32_t l_nb = 0;
+                              l_nb += (p_candidate.get_blue_triangle() == 4);
+                              l_nb += (p_candidate.get_yellow_square() == 4);
+                              l_nb += (p_candidate.get_purple_circle() == 4);
+                              return !l_nb;
+                             }
+                             ,"Pas de 4"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {uint32_t l_nb = 0;
+                              l_nb += (p_candidate.get_blue_triangle() == 4);
+                              l_nb += (p_candidate.get_yellow_square() == 4);
+                              l_nb += (p_candidate.get_purple_circle() == 4);
+                              return 1 == l_nb;
+                             }
+                            ,"Un 4"
+                            }
+                           ,{[](const candidate &p_candidate) -> bool
+                             {uint32_t l_nb = 0;
+                              l_nb += (p_candidate.get_blue_triangle() == 4);
+                              l_nb += (p_candidate.get_yellow_square() == 4);
+                              l_nb += (p_candidate.get_purple_circle() == 4);
+                              return 2 == l_nb;
+                             }
+                             , "Deux 4"
                             }
                            }
                           )
